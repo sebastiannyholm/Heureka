@@ -1,19 +1,17 @@
-package SearchClient;
+package searchclient;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
-import Objects.Node;
+import objects.Node;
 
 public abstract class DataStructure {
 	
 	private HashSet<Node> explored;
 	
 	public DataStructure() {
-		
-		
 		this.explored = new HashSet<Node>();
 	}
 	
@@ -27,14 +25,16 @@ public abstract class DataStructure {
 	
 	public abstract void addToFrontier(Node n);
 	public abstract boolean inFrontier(Node n);
+	public abstract boolean fronterIsEmpty();
 	public abstract Node getNodeFromFrontier();
 	
-	public class DataStructureBFS extends DataStructure {
+	public static class DataStructureBFS extends DataStructure {
 		
 		private ArrayDeque<Node> frontier;
 		private HashSet<Node> frontierSet;
 		
 		public DataStructureBFS() {
+			super();
 			this.frontier = new ArrayDeque<Node>();
 			this.frontierSet = new HashSet<Node>();
 			
@@ -57,14 +57,20 @@ public abstract class DataStructure {
 			this.frontierSet.remove(n);
 			return n;
 		}
+
+		@Override
+		public boolean fronterIsEmpty() {
+			return this.frontier.isEmpty();
+		}
 	}
 	
-	public class DataStructureDFS extends DataStructure {
+	public static class DataStructureDFS extends DataStructure {
 		
 		private Stack<Node> frontier;
 		private HashSet<Node> frontierSet;
 		
 		public DataStructureDFS() {
+			super();
 			this.frontier = new Stack<Node>();
 			this.frontierSet = new HashSet<Node>();
 			
@@ -87,14 +93,20 @@ public abstract class DataStructure {
 			this.frontierSet.remove(n);
 			return n;
 		}
+		
+		@Override
+		public boolean fronterIsEmpty() {
+			return this.frontier.isEmpty();
+		}
 	}
 	
-	public class DataStructureBestFirst extends DataStructure {
+	public static class DataStructureBestFirst extends DataStructure {
 		
 		private PriorityQueue<Node> frontier;
 		private HashSet<Node> frontierSet;
 		
 		public DataStructureBestFirst(Heuristic h) {
+			super();
 			this.frontier = new PriorityQueue<Node>(h);
 			this.frontierSet = new HashSet<Node>();
 		}
@@ -115,6 +127,11 @@ public abstract class DataStructure {
 			Node n = this.frontier.poll();
 			this.frontierSet.remove(n);
 			return n;
+		}
+		
+		@Override
+		public boolean fronterIsEmpty() {
+			return this.frontier.isEmpty();
 		}
 	}
 }

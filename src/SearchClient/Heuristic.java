@@ -1,8 +1,8 @@
-package SearchClient;
+package searchclient;
 
 import java.util.Comparator;
 
-import Objects.Node;
+import objects.Node;
 
 public class Heuristic implements Comparator<Node> {
 
