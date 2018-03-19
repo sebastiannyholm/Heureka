@@ -5,27 +5,34 @@ import java.util.List;
 
 public class Vertex {
 	
-	private LinkedList<Edge> edges;
+	private LinkedList<Edge> outgoing;
+	private LinkedList<Edge> ingoing;
+	
 	private Coordinate position;
 	
 	public Vertex(int x, int y) {
 		this.position = new Coordinate(x,y);
-		this.edges = new LinkedList<Edge>();
+		this.outgoing = new LinkedList<Edge>();
+		this.ingoing = new LinkedList<Edge>();
 	}
 	
-	public void addEdge(Edge e) {
-		this.edges.add(e);
+	public void addOutgoing(Edge e) {
+		this.outgoing.add(e);
+	}
+	
+	public void addIngoing(Edge e) {
+		this.ingoing.add(e);
 	}
 	
 	public boolean exists(int x, int y) {
 		return this.position.x == x && this.position.y == y;
 	}
 	
-	public double distanceFromNeighbor(Vertex v) {
-		return this.distanceFromNeighbor(v, "direct");
+	public int distanceTo(Vertex v) {
+		return this.distanceTo(v, "direct");
 	}
 	
-	public double distanceFromNeighbor(Vertex v, String type) {
+	public int distanceTo(Vertex v, String type) {
 		return type == "manhattan" ? this.position.manhattanDistance(v.getPosition()) : this.position.directDistance(v.getPosition());
 	}
 	
@@ -33,12 +40,17 @@ public class Vertex {
 		return this.position;
 	}
 	
+	@Override
 	public String toString() {
 		return this.position.toString();  
 	}
 	
-	public LinkedList<Edge> getEdges() {
-		return this.edges;
+	public LinkedList<Edge> getOutgoing() {
+		return this.outgoing;
+	}
+	
+	public LinkedList<Edge> getIngoing() {
+		return this.ingoing;
 	}
 
 }

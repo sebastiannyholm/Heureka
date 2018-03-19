@@ -2,21 +2,19 @@ package searchclient;
 
 import java.util.Comparator;
 
-import objects.Node;
-
-public class Heuristic implements Comparator<Node> {
+public class Heuristic implements Comparator<State> {
 
 	public Heuristic() {
 		
 	}
 
 	@Override
-	public int compare(Node n1, Node n2) {
-		return this.g(n1) - this.g(n2);
+	public int compare(State s1, State s2) {
+		return this.f(s1) - this.f(s2);
 	}
 	
-	public int g(Node n) {
-		return n.g() + n.h();
+	public int f(State s) {
+		return s.g() + s.h();
 	}
 	
 }

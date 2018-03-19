@@ -26,14 +26,16 @@ public class Graph {
 			
 			String line;
 		    while ((line = br.readLine()) != null) {
-		    	String[] parts = line.split(" "); // 0: start x, 1: start y, 2: label, 3: x end, 4: y end 
+		    	String[] tokens = line.split(" "); // 0: start x1, 1: start y1, 2: label, 3: end x2, 4: end y2 
 		    	
-		    	Vertex source = this.createOrGetVertex(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-		    	Vertex target = this.createOrGetVertex(Integer.parseInt(parts[3]), Integer.parseInt(parts[4]));
+		    	Vertex source = this.createOrGetVertex(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]));
+		    	Vertex target = this.createOrGetVertex(Integer.parseInt(tokens[3]), Integer.parseInt(tokens[4]));
 		    	
-		    	Edge e = new Edge(parts[2], source, target);
+		    	Edge e = new Edge(tokens[2], source, target);
 		    	
-		    	source.addEdge(e);
+		    	source.addOutgoing(e);
+		    	target.addIngoing(e);
+		    	
 		    	this.edges.add(e);
 		    }
 		    
@@ -76,6 +78,35 @@ public class Graph {
 				edges.add(e);
 		
 		return edges; 
+	}
+	
+	public Vertex getVertexByLabels(String label1, String label2) {
+		for (Vertex v : this.vertices) {
+			
+			boolean bool1 = false;
+			boolean bool2 = false;
+			
+			for (Edge e : v.getIngoing()) {
+				if (e.getLabel().equals(label1)) {
+					bool1 = true;
+				} else if (e.getLabel().equals(label2)) {
+					bool2 = true;
+				}
+			}
+			
+			for (Edge e : v.getOutgoing()) {
+				if (e.getLabel() == label1) {
+					bool1 = true;
+				} else if (e.getLabel().equals(label2)) {
+					bool2 = true;
+				}
+			}
+			
+			if (bool1 && bool2)
+				return v;
+		}
+		
+		return null;
 	}
 	
 	public String toString() {

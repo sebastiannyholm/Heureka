@@ -14,8 +14,8 @@ public class Coordinate {
 		return Math.abs(x - c.x) + Math.abs(y - c.y);
 	}
 	
-	public double directDistance(Coordinate c) {
-		return Math.sqrt(Math.pow(x - c.x, 2) + Math.pow(y - c.y, 2));
+	public int directDistance(Coordinate c) {
+		return (int) Math.round(Math.sqrt(Math.pow(x - c.x, 2) + Math.pow(y - c.y, 2)));
 	}
 	
 	public String toString() {

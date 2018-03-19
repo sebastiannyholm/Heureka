@@ -5,18 +5,16 @@ public class Edge {
 	private String label;
 	private Vertex source;
 	private Vertex target;
-	private double weight;
+	private int weight;
 	
 	public Edge(String label, Vertex source, Vertex target) {
 		this.label = label;
 		this.source = source;
 		this.target = target;
+		this.weight = source.distanceTo(target);
 	}
 	
-	public double getWeight() {
-		if (this.weight == 0)
-			this.weight = source.distanceFromNeighbor(target);
-		
+	public int getWeight() {
 		return this.weight;
 	}
 	
@@ -24,6 +22,10 @@ public class Edge {
 		return this.label;
 	}
 
+	public Vertex getSource() {
+		return this.source;
+	}
+	
 	public Vertex getTarget() {
 		return this.target;
 	}

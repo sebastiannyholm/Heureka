@@ -4,47 +4,44 @@ import java.util.LinkedList;
 
 import objects.Edge;
 import objects.Graph;
-import objects.Node;
 import objects.Vertex;
 
 public class SearchClient {
 
-	public static String strategy = "BFS";
-	public static String map = "copenhagen.txt";
+	public static String strategy = "BestSearch";
+	public static String map = "manhattan.txt";
 	
 	private Graph graph;
-	private LinkedList<Edge> initialEdges;
-	private LinkedList<Edge> goalEdges;
+	private Vertex initialVertex;
+	private Vertex goalVertex;
 	
-	private LinkedList<Node> initialStates;
+	private State initialState;
 	
-	public SearchClient(String map) {
-		
-		this.initialStates = new LinkedList<Node>(); 
+	public SearchClient(String map) { 
 		
 		this.graph = new Graph(map);
 		
-		this.initialEdges = this.graph.getEdgesByLabel("Vestervoldgade");
-		this.goalEdges = this.graph.getEdgesByLabel("Larsbjoernsstraede");
+		// Get crossing of label1 and label2
+		this.initialVertex = this.graph.getVertexByLabels("street_0", "avenue_0");
+		this.goalVertex = this.graph.getVertexByLabels("street_9", "avenue_9");
 		
-		for (Edge e : initialEdges)
-			this.initialStates.add(new Node(null, e));
+		this.initialState = new State(null, initialVertex);
 	}
 
-	public String Search(DataStructure ds) {
+	public LinkedList<State> Search(DataStructure ds) {
 		
-		for (Node n : initialStates)
-			ds.addToFrontier(n);
+		ds.addToFrontier(initialState);
 		
 		while (!ds.fronterIsEmpty()) {
 			
-			Node frontier = ds.getNodeFromFrontier();
+			State frontier = ds.getNodeFromFrontier();
 			
-			if (frontier.isGoalState(this.goalEdges))
-				return frontier.getPath();
+			if (frontier.isGoalState(this.goalVertex))
+				return frontier.getPath(new LinkedList<State>());
 			
-			for (Node child : frontier.getChildren()) {
+			for (State child : frontier.getChildren()) {
 				if (!ds.inFrontier(child) && !ds.inExplored(child)) {
+					child.calcH(goalVertex);
 					ds.addToFrontier(child);
 				}
 			}
@@ -81,8 +78,13 @@ public class SearchClient {
 	            System.err.println("Default strategy chosed (BFS)");    
 		}
 		
-		System.out.println(client.Search(ds));
+		LinkedList<State> path = client.Search(ds);
 		
+		System.out.println("Path found in - explored states: " + ds.countExplored() + ", frontier: " + ds.countFrontier() + ", total: " + (ds.countExplored() + ds.countFrontier()));
+		
+		for (State s : path) {
+			System.out.println(s.toString());
+		}
 		
     }
 }
