@@ -9,7 +9,8 @@ public class SearchClient {
 
 	public static String strategy = "BestSearch";
 	//public static String map = "manhattan.txt";
-	public static String map = "copenhagen.txt";
+	//public static String map = "copenhagen.txt";
+	public static String map = "dtu.txt";
 	
 	private Graph graph;
 	private Vertex initialVertex;
@@ -25,9 +26,11 @@ public class SearchClient {
 		//this.initialVertex = this.graph.getVertexByLabels("street_0", "avenue_0");
 		//this.goalVertex = this.graph.getVertexByLabels("street_9", "avenue_9");
 		
-		this.initialVertex = this.graph.getVertexByLabels("Vestervoldgade", "SktPedersStraede");
-		this.goalVertex = this.graph.getVertexByLabels("Noerrevoldgade", "LarslejStraede");
+		//this.initialVertex = this.graph.getVertexByLabels("Vestervoldgade", "SktPedersStraede");
+		//this.goalVertex = this.graph.getVertexByLabels("Noerrevoldgade", "LarslejStraede");
 		
+		this.initialVertex = this.graph.getVertexByLabels("NielsKoppelsAlle", "ParkeringsVej");
+		this.goalVertex = this.graph.getVertexByLabels("AsmussensAlle", "Elektrovej");
 		
 		this.initialState = new State(null, initialVertex, null);
 	}
