@@ -30,4 +30,9 @@ public class Edge {
 		return this.target;
 	}
 	
+	@Override
+	public String toString() {
+		return this.label;
+	}
+	
 }
