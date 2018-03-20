@@ -26,7 +26,7 @@
 110 60 AsmussensAlle 120 20
 120 20 AsmussensAlle 130 10
 120 20 Bygning303Vej 110 15
-80 105 ØrstedsPlads 80 95
+80 105 OerstedsPlads 80 95
 65 100 Akustikvej 65 90
 45 100 Centrifugevej 45 90
 35 90 Skylab 40 90
@@ -35,4 +35,5 @@
 80 65 Hegnet 90 65
 50 55 Elektrovej 25 50
 50 55 Elektrovej 80 65
-80 65 Elektrovej 110 60 
+80 65 Elektrovej 110 60
+50 20 Fysikvej 80 30 
