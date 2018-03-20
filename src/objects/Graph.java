@@ -90,7 +90,7 @@ public class Graph {
 			}
 			
 			for (Edge e : v.getOutgoing()) {
-				if (e.getLabel() == label1) {
+				if (e.getLabel().equals(label1)) {
 					bool1 = true;
 				} else if (e.getLabel().equals(label2)) {
 					bool2 = true;

@@ -25,8 +25,8 @@ public class SearchClient {
 		//this.initialVertex = this.graph.getVertexByLabels("street_0", "avenue_0");
 		//this.goalVertex = this.graph.getVertexByLabels("street_9", "avenue_9");
 		
-		this.initialVertex = this.graph.getVertexByLabels("Vestervoldgade", "SktPedersStraede");
-		this.goalVertex = this.graph.getVertexByLabels("Noerrevoldgade", "LarslejStraede");
+		this.initialVertex = this.graph.getVertexByLabels("NielsKoppelsAlle", "ParkeringsVej");
+		this.goalVertex = this.graph.getVertexByLabels("Elektrovej", "Hegnet");
 		
 		
 		this.initialState = new State(null, initialVertex, null);
