@@ -2,7 +2,6 @@ package searchclient;
 
 import java.util.LinkedList;
 
-import objects.Edge;
 import objects.Graph;
 import objects.Vertex;
 
