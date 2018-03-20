@@ -30,7 +30,7 @@ public class State {
 	}
 	
 	public void calcH(Vertex v) {
-		this.h = (int) Math.pow(this.vertex.distanceTo(v),2);
+		this.h = this.vertex.distanceTo(v);
 	}
 	
 	public int h() {
