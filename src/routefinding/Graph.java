@@ -1,4 +1,4 @@
-package objects;
+package routefinding;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

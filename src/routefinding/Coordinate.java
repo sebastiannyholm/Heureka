@@ -1,4 +1,4 @@
-package objects;
+package routefinding;
 
 public class Coordinate {
 	
