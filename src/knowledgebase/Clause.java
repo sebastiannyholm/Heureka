@@ -6,12 +6,15 @@ import java.util.Map;
 public class Clause {
 
 	private HashMap<Literal, Boolean> literals = new HashMap<Literal, Boolean>();
+	private int counter;
+	private int c1;
+	private int c2;
 	
-	public Clause() {
-		
+	public Clause(int counter) {
+		this.counter = counter;
 	}
 	
-	public Clause(Clause c1, Clause c2) {
+	public Clause(Clause c1, Clause c2, int counter) {
 		for (Map.Entry<Literal, Boolean> entry : c1.getLiterals().entrySet()) {
 			if (c2.getLiterals().containsKey(entry.getKey())) {
 				if (c2.getLiterals().get(entry.getKey()) == entry.getValue()) {
@@ -31,10 +34,18 @@ public class Clause {
 				this.addLiteral(entry.getKey(), entry.getValue());
 			}
 		}
+		
+		this.c1 = c1.getCounter();
+		this.c2 = c2.getCounter();
+		this.counter = counter;
 	}
 	
 	public void addLiteral(Literal l, Boolean b) {
 		this.literals.put(l, b);
+	}
+	
+	public int getCounter() {
+		return this.counter;
 	}
 	
 	public HashMap<Literal, Boolean> getLiterals() {
@@ -43,8 +54,15 @@ public class Clause {
 	
 	@Override
 	public String toString() {
+		return this.toString(false);
+	}
+	
+	public String toString(boolean printStuff) {
 		
-		String toString = "";
+		String toString = this.counter + ". ";
+		
+		if (printStuff) 
+			toString = toString + "(" + this.c1 + "," + this.c2 + ") ";
 		
 		int counter = 1;
 		for (Map.Entry<Literal, Boolean> entry : literals.entrySet()) {
@@ -56,6 +74,9 @@ public class Clause {
 			
 			counter++;
 		}
+		
+		if (literals.isEmpty())
+			toString = toString + "{}";
 		
 		return toString;
 	}
@@ -74,6 +95,21 @@ public class Clause {
 		else if (this.getClass() != obj.getClass())
 			return false;
 		
-		return this.hashCode() == ((Clause) obj).hashCode();
+		Clause c = (Clause) obj;
+		
+		for (Map.Entry<Literal, Boolean> entry : literals.entrySet()) {
+			if (!(c.getLiterals().containsKey(entry.getKey()) && c.getLiterals().get(entry.getKey()) == entry.getValue())) {
+				return false;
+			}
+		}
+		
+		for (Map.Entry<Literal, Boolean> entry : c.getLiterals().entrySet()) {
+			if (!(literals.containsKey(entry.getKey()) && literals.get(entry.getKey()) == entry.getValue())) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
+
 }

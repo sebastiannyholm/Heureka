@@ -14,7 +14,8 @@ public class KnowledgeBase {
 			
 			char[] chars = line.toCharArray();
 			
-			Clause c = new Clause();
+			Clause c = new Clause(this.clauses.size());
+			
 			boolean negated = false;
 			
 			for (int i = 0; i < chars.length; i++) {
@@ -29,7 +30,7 @@ public class KnowledgeBase {
 				
 				c.addLiteral(l, negated);
 			}
-			clauses.add(c);
+			this.clauses.add(c);
 		}
 	}
 	
@@ -39,12 +40,14 @@ public class KnowledgeBase {
 	
 	@Override
 	public String toString() {
-		
+		return toString(false);
+	}
+	
+	public String toString(boolean printStuff) {
 		String toString = "";
 		
-		for (Clause c : clauses) {
-			toString = toString + c.toString() + "\n";
-		}
+		for (Clause c : clauses)
+			toString = toString + c.toString(printStuff) + "\n";
 		
 		return toString;
 	}

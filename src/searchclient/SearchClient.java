@@ -1,12 +1,12 @@
 package searchclient;
 
 import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
 
 import routefinding.Graph;
 import routefinding.Vertex;
 import searchclient.State.StateKnowledgeBase;
 import knowledgebase.KnowledgeBase;
+import knowledgebase.Literal;
 import knowledgebase.Clause;
 
 public class SearchClient {
@@ -51,8 +51,11 @@ public class SearchClient {
 			
 			KnowledgeBase kb = new KnowledgeBase(kbStr);
 			
-			this.initialState = new State.StateKnowledgeBase(null, kb, null); 
-			this.goalState = new Clause(); // Empty clause
+			Clause a = new Clause(kb.getClauses().size());
+			a.addLiteral(new Literal('a'), true);
+			
+			this.initialState = new State.StateKnowledgeBase(null, kb, a); 
+			this.goalState = new Clause(0); // Empty clause
 			
 		} else {
 			
@@ -71,18 +74,12 @@ public class SearchClient {
 				return currentNode.getPath(new LinkedList<State>());	
 			}
 			
-//			try {
-//				TimeUnit.SECONDS.sleep(0);
-//				System.out.println(((StateKnowledgeBase) currentNode).getClauses().toString() + ", " + ((StateKnowledgeBase) currentNode).getClauses().size());
-//				
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-			
-			
 			for (State childNode : currentNode.getChildren()) {
+				
 				if (!ds.inFrontier(childNode) && !ds.inExplored(childNode)) {
+					
 					childNode.calcH(this.goalState);
+					
 					ds.addToFrontier(childNode);
 				}
 			}
@@ -116,14 +113,21 @@ public class SearchClient {
 		
 		LinkedList<State> path = client.Search(ds);
 		
-		System.out.println("Path found in - explored states: " + ds.countExplored() + ", frontier: " + ds.countFrontier() + ", total: " + (ds.countExplored() + ds.countFrontier()));
-		System.out.println();
-		
-		for (State s : path) {
-			System.out.println(s.toString());
+		if (path == null) {
+			System.out.println("You goal does not exist.");
+		} else {
+			
+			System.out.println("Path found in - explored states: " + ds.countExplored() + ", frontier: " + ds.countFrontier() + ", total: " + (ds.countExplored() + ds.countFrontier()));
+			System.out.println();
+			
+			for (State s : path) {
+				System.out.println(s.toString());
+			}
+			
+			System.out.println();
+			System.out.println("Search completed.");
+
 		}
-		
-		System.out.println("You have arrived at your destination.");
 		
     }
 }

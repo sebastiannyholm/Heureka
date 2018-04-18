@@ -152,10 +152,10 @@ public abstract class State {
 		public StateKnowledgeBase(StateKnowledgeBase p, KnowledgeBase kb, Clause c) {
 			super(p);
 			
-			this.clauses = this.parent != null ? new ArrayList<Clause>(((StateKnowledgeBase) this.parent).getClauses()) : new ArrayList<Clause>();
-			if (c != null) this.clauses.add(c);
+			StateKnowledgeBase parent = (StateKnowledgeBase) this.parent;
 			
-			//Collections.sort(clauses);
+			this.clauses = parent != null ? new ArrayList<Clause>(parent.getClauses()) : new ArrayList<Clause>();
+			if (parent != null) this.clauses.add(parent.getClause());
 			
 			this.clause = c;
 			
@@ -169,6 +169,7 @@ public abstract class State {
 		
 		@Override
 		public boolean isGoalState(Object obj) {
+			//return this.clause != null ? this.clause.getLiterals().isEmpty() : this.kb.getClauses().isEmpty();
 			if (obj instanceof Clause)
 			{
 				Clause c = (Clause) obj;
@@ -181,34 +182,47 @@ public abstract class State {
 		public LinkedList<State> getChildren() {
 			LinkedList<State> children = new LinkedList<State>();
 			
-			for (Clause c1 : kb.getClauses()) {
-				for (Clause c2 : kb.getClauses()) {
-					if (!c1.equals(c2)) {
-						children.add(new StateKnowledgeBase(this, this.kb, new Clause(c1, c2)));
-					}
-				}
-				for (Clause c2 : clauses) {
-					if (!c1.equals(c2)) {
-						children.add(new StateKnowledgeBase(this, this.kb, new Clause(c1, c2)));
-					}
+			ArrayList<Clause> allClauses = new ArrayList<Clause>();
+			allClauses.addAll(this.kb.getClauses());
+			allClauses.addAll(this.clauses);
+			
+			for (Clause c : allClauses) {
+				if (c.equals(this.clause)) continue;
+				
+				Clause newC = new Clause(c, this.clause, this.clause.getCounter() + 1);
+				
+				if (!this.kb.getClauses().contains(newC)) {
+					children.add(new StateKnowledgeBase(this, this.kb, newC));	
 				}
 			}
-				
-				
 			
 			return children;
 		}
 
 		@Override
 		public int hashCode() {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
 		public boolean equals(Object obj) {
-			// TODO Auto-generated method stub
-			return true;
+			if (obj instanceof StateKnowledgeBase) {
+				StateKnowledgeBase state = (StateKnowledgeBase) obj;
+				
+				ArrayList<Clause> allClauses = new ArrayList<Clause>(state.clauses);
+				allClauses.add(state.clause);
+				
+				for (Clause c : state.getClauses()) {
+					if (!allClauses.contains(c)) {
+						return false;
+					}
+				}
+				
+				return allClauses.contains(this.clause);
+				//return this.kb.getClauses().contains(state.getClause()) || this.clauses.contains(state.getClause()) || this.clause.equals(state.getClause());
+			}
+			
+			return false;
 		}
 
 		@Override
@@ -218,21 +232,21 @@ public abstract class State {
 			
 			String output = "";
 			
-			if (this.clause == null) {
-				output = "Start:";
-			} else if (parent.clause == null) {
-				output = "Next do:";
+			if (parent == null) {
+				output = "Start:\n" + this.kb.toString() + "----------\n" + this.clause.toString() + "\n----------";
 			} else {
-				output = "DONE?";
+				output = this.clause.toString(true) + "\n----------";
 			}
-			
-			output = output + " " + this.kb.toString();
 			
 			return output;
 		}
 		
 		public ArrayList<Clause> getClauses() {
 			return this.clauses;
+		}
+		
+		public Clause getClause() {
+			return this.clause;
 		}
 	}
 
