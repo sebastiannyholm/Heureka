@@ -8,7 +8,7 @@ public class KnowledgeBase {
 	
 	public KnowledgeBase(String kb) {
 		
-		String[] lines = kb.split(System.getProperty("line.separator"));
+		String[] lines = kb.split("\n");
 		
 		for (String line : lines) {
 			
