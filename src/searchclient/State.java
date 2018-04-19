@@ -219,7 +219,6 @@ public abstract class State {
 				}
 				
 				return allClauses.contains(this.clause);
-				//return this.kb.getClauses().contains(state.getClause()) || this.clauses.contains(state.getClause()) || this.clause.equals(state.getClause());
 			}
 			
 			return false;
