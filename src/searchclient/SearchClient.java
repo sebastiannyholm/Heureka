@@ -10,17 +10,18 @@ import knowledgebase.Literal;
 import knowledgebase.Clause;
 
 public class SearchClient {
-
-	//public static String task = "RouteFinding";
-	public static String task = "KnowledgeBase"; 
-	public static String strategy = "BestSearch";
+ 
+	public static String strategy = "AStar";
 	
 	// For RouteFinding
-	//public static String map = "manhattan.txt";
-	//public static String map = "copenhagen.txt";
-	public static String map = "dtu.txt";
+	//public static String task = "RouteFinding";
+	//public static String file = "manhattan.txt";
+	//public static String file = "copenhagen.txt";
+	//public static String file = "dtu.txt";
 	
 	// For KnowledgeBase
+	public static String task = "KnowledgeBase";
+	public static String file = "kb1.txt";
 	
 	private State initialState;
 	private Object goalState;
@@ -28,7 +29,7 @@ public class SearchClient {
 	public SearchClient() { 
 		
 		if (task == "RouteFinding") {
-			Graph graph = new Graph(map);
+			Graph graph = new Graph(file);
 			
 			// Get crossing of label1 and label2
 			//this.initialVertex = this.graph.getVertexByLabels("street_0", "avenue_0");
@@ -37,24 +38,16 @@ public class SearchClient {
 			//this.initialVertex = this.graph.getVertexByLabels("Vestervoldgade", "SktPedersStraede");
 			//this.goalVertex = this.graph.getVertexByLabels("Noerrevoldgade", "LarslejStraede");
 			
-			Vertex initialVertex = graph.getVertexByLabels("NielsKoppelsAlle", "ParkeringsVej");
+			Vertex initialVertex = graph.getVertexByLabels("AnkerEngelundsVej", "Lundtoftegaardsvej");
 			this.initialState = new State.StateRouteFinding(null, graph, initialVertex, null);
 			
 			this.goalState = graph.getVertexByLabels("Elektrovej", "Hegnet");
 		
 		} else if (task == "KnowledgeBase") {
 			
-			String kbStr = "a<b\n" 
-						 + "b<cd\n" 
-					     + "bc<d\n" 
-						 + "d";
+			KnowledgeBase kb = new KnowledgeBase(file);
 			
-			KnowledgeBase kb = new KnowledgeBase(kbStr);
-			
-			Clause a = new Clause(kb.getClauses().size());
-			a.addLiteral(new Literal('a'), true);
-			
-			this.initialState = new State.StateKnowledgeBase(null, kb, a); 
+			this.initialState = new State.StateKnowledgeBase(null, kb, kb.getInput()); 
 			this.goalState = new Clause(0); // Empty clause
 			
 		} else {
@@ -103,12 +96,15 @@ public class SearchClient {
 	        case "DFS":
 	            ds = new DataStructure.DataStructureDFS();
 	            break;
-	        case "BestSearch":
-	            ds = new DataStructure.DataStructureBestFirst(new Heuristic());
+	        case "AStar":
+	            ds = new DataStructure.DataStructureBestFirst(new Heuristic.AStar());
+	            break;
+	        case "Greedy":
+	            ds = new DataStructure.DataStructureBestFirst(new Heuristic.Greedy());
 	            break;
 	        default:
 	            ds = new DataStructure.DataStructureBFS();
-	            System.err.println("Default strategy chosed (BFS)");    
+	            System.err.println("No correct strategy detected, defaulting to (BFS)");    
 		}
 		
 		LinkedList<State> path = client.Search(ds);

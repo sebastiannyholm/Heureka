@@ -9,15 +9,12 @@ import java.util.List;
 
 public class Graph {
 
-	private List<Vertex> vertices;
-	private List<Edge> edges;
+	private List<Vertex> vertices = new LinkedList<Vertex>();
+	private List<Edge> edges = new LinkedList<Edge>();
 	
-	public Graph(String map) {
+	public Graph(String file) {
 		
-		this.vertices = new LinkedList<Vertex>();
-		this.edges = new LinkedList<Edge>();
-		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/maps/" + map))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("src/maps/" + file))) {
 			
 			String line;
 		    while ((line = br.readLine()) != null) {

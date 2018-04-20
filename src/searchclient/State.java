@@ -19,8 +19,7 @@ public abstract class State {
 	
 	public State(State p) {
 		this.parent = p;
-	
-		this.g = (p == null) ? 0 : p.g() + 1;
+		
 		this.h = 0;
 	}
 	
@@ -64,6 +63,9 @@ public abstract class State {
 			this.graph = g;
 			this.vertex = v;
 			this.edgeToVertex = e;
+			
+			StateRouteFinding parent = (StateRouteFinding) this.parent;
+			this.g = (parent == null) ? 0 : parent.g() + e.getWeight();
 		}
 		
 		@Override
@@ -153,6 +155,8 @@ public abstract class State {
 			super(p);
 			
 			StateKnowledgeBase parent = (StateKnowledgeBase) this.parent;
+			
+			this.g = (parent == null) ? 0 : parent.g() + 1;
 			
 			this.clauses = parent != null ? new ArrayList<Clause>(parent.getClauses()) : new ArrayList<Clause>();
 			if (parent != null) this.clauses.add(parent.getClause());

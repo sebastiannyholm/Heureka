@@ -2,7 +2,7 @@ package searchclient;
 
 import java.util.Comparator;
 
-public class Heuristic implements Comparator<State> {
+public abstract class Heuristic implements Comparator<State> {
 
 	public Heuristic() {
 		
@@ -13,8 +13,30 @@ public class Heuristic implements Comparator<State> {
 		return this.f(s1) - this.f(s2);
 	}
 	
-	public int f(State s) {
-		return s.g() + s.h();
+	public abstract int f(State s);
+	
+	public static class AStar extends Heuristic {
+		
+		public AStar() {
+			
+		}
+		
+		public int f(State s) {
+			return s.g() + s.h();
+		}
+		
+	}
+	
+	public static class Greedy extends Heuristic {
+		
+		public Greedy() {
+			
+		}
+		
+		public int f(State s) {
+			return s.h();
+		}
+		
 	}
 	
 }
