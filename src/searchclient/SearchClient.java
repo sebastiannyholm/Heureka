@@ -4,9 +4,7 @@ import java.util.LinkedList;
 
 import routefinding.Graph;
 import routefinding.Vertex;
-import searchclient.State.StateKnowledgeBase;
 import knowledgebase.KnowledgeBase;
-import knowledgebase.Literal;
 import knowledgebase.Clause;
 
 public class SearchClient {

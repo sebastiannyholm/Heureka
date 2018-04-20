@@ -3,10 +3,12 @@ package searchclient;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.LinkedList;
 
 import knowledgebase.Clause;
 import knowledgebase.KnowledgeBase;
+import knowledgebase.Literal;
 import routefinding.Edge;
 import routefinding.Graph;
 import routefinding.Vertex;
@@ -157,23 +159,48 @@ public abstract class State {
 			StateKnowledgeBase parent = (StateKnowledgeBase) this.parent;
 			
 			this.g = (parent == null) ? 0 : parent.g() + 1;
+			this.kb = kb;
 			
 			this.clauses = parent != null ? new ArrayList<Clause>(parent.getClauses()) : new ArrayList<Clause>();
 			if (parent != null) this.clauses.add(parent.getClause());
 			
-			this.clause = c;
-			
-			this.kb = kb;
+			this.clause = c;	
 		}
 
+		public void calcH2(Clause prevClause, Clause combinedClause) {
+			
+			int score = 0;
+			
+			for (Map.Entry<Literal, Boolean> entry : prevClause.getLiterals().entrySet()) {
+				if (combinedClause.getLiterals().containsKey(entry.getKey())) {
+					if (combinedClause.getLiterals().get(entry.getKey()) == entry.getValue()) { 
+						// Literal is in both, but the same
+						score = score + 1;
+					} else { // Literal is in both, one negated and one not
+						score = score + 0;
+					}
+				} else { // Literal is only in prevClause
+					score = score + 2;
+				}
+			}
+			
+			for (Map.Entry<Literal, Boolean> entry : combinedClause.getLiterals().entrySet()) {
+				if (!prevClause.getLiterals().containsKey(entry.getKey())) {
+					// Literal is only in combinedClause
+					score = score + 2;
+				}
+			}
+			
+			this.h = score;
+		}
+		
 		@Override
 		public void calcH(Object obj) {
-			// TODO Auto-generated method stub
+			//this.h = this.clause.getLiterals().size();	
 		}
 		
 		@Override
 		public boolean isGoalState(Object obj) {
-			//return this.clause != null ? this.clause.getLiterals().isEmpty() : this.kb.getClauses().isEmpty();
 			if (obj instanceof Clause)
 			{
 				Clause c = (Clause) obj;
@@ -196,7 +223,9 @@ public abstract class State {
 				Clause newC = new Clause(c, this.clause, this.clause.getCounter() + 1);
 				
 				if (!this.kb.getClauses().contains(newC)) {
-					children.add(new StateKnowledgeBase(this, this.kb, newC));	
+					StateKnowledgeBase s = new StateKnowledgeBase(this, this.kb, newC);
+					s.calcH2(this.clause, c);
+					children.add(s);
 				}
 			}
 			
