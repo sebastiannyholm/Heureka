@@ -75,7 +75,15 @@ public abstract class State {
 			if (obj instanceof Vertex)
 			{
 				Vertex v = (Vertex) obj;
-				this.h = this.vertex.distanceTo(v);	
+				
+				// For direct distance
+				this.h = this.vertex.distanceTo(v);
+				
+				// For direct distance squared
+				//this.h = (int) Math.pow(this.vertex.distanceTo(v),2);
+				
+				// For manhattan distance
+				//this.h = this.vertex.distanceTo(v, "manhattan");
 			}
 		}
 		
@@ -175,19 +183,19 @@ public abstract class State {
 				if (combinedClause.getLiterals().containsKey(entry.getKey())) {
 					if (combinedClause.getLiterals().get(entry.getKey()) == entry.getValue()) { 
 						// Literal is in both, but the same
-						score = score + 1;
-					} else { // Literal is in both, one negated and one not
-						score = score + 0;
+						score = score + 0; // redundant, but doesn't change cost of new clause
+					} else { // Literal is in both, one negated and one not - i.e. one clause is removed
+						score = score - 1;
 					}
-				} else { // Literal is only in prevClause
-					score = score + 2;
+				} else { // Literal is only in prevClause - i.e. one literal is added to the new clause
+					score = score + 1;
 				}
 			}
 			
 			for (Map.Entry<Literal, Boolean> entry : combinedClause.getLiterals().entrySet()) {
 				if (!prevClause.getLiterals().containsKey(entry.getKey())) {
-					// Literal is only in combinedClause
-					score = score + 2;
+					// Literal is only in combinedClause - i.e. one literal is added to the new clause
+					score = score + 1;
 				}
 			}
 			
@@ -216,15 +224,38 @@ public abstract class State {
 			ArrayList<Clause> allClauses = new ArrayList<Clause>();
 			allClauses.addAll(this.kb.getClauses());
 			allClauses.addAll(this.clauses);
+			//allClauses.add(this.clause);
 			
 			for (Clause c : allClauses) {
-				if (c.equals(this.clause)) continue;
+				//if (c.equals(this.clause)) continue;
+				
+				int complementaryLiterals = 0;
+				for (Map.Entry<Literal, Boolean> entry : c.getLiterals().entrySet()) {
+					if (this.clause.getLiterals().containsKey(entry.getKey())) {
+						if (this.clause.getLiterals().get(entry.getKey()) != entry.getValue()) {
+							// If complementary
+							complementaryLiterals++;
+							
+							if (complementaryLiterals > 1) break;
+						}
+					}
+				}
+				
+				if (complementaryLiterals > 1) continue;
 				
 				Clause newC = new Clause(c, this.clause, this.clause.getCounter() + 1);
 				
-				if (!this.kb.getClauses().contains(newC)) {
+				if (!allClauses.contains(newC)) {
 					StateKnowledgeBase s = new StateKnowledgeBase(this, this.kb, newC);
 					s.calcH2(this.clause, c);
+//					
+//					LinkedList<State> path = s.getPath(new LinkedList<State>());
+//					
+//					System.out.println("--------------");
+//					for (State e : path) {
+//						System.out.println(e.toString());
+//					}
+//					
 					children.add(s);
 				}
 			}

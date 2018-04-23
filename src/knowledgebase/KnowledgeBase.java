@@ -24,20 +24,20 @@ public class KnowledgeBase {
 		    		continue;
 		    	}
 		    	
-		    	char[] chars = line.toCharArray();
+		    	String[] tokens = line.split(" ");
 				
 				Clause c = new Clause(this.clauses.size());
 				
 				boolean negated = false;
 				
-				for (int i = 0; i < chars.length; i++) {
+				for (int i = 0; i < tokens.length; i++) {
 					
-					if (chars[i] == '<') {
+					if (tokens[i].charAt(0) == '<') {
 						i++;
 						negated = true;
 					}
 					
-					Literal l = new Literal(chars[i]);
+					Literal l = new Literal(tokens[i].charAt(0));
 					
 					c.addLiteral(l, negated);
 				}

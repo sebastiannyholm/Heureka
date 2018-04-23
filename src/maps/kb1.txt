@@ -1,6 +1,6 @@
-a<b
-b<cd
-bc<d
+a < b
+b < c d
+b c < d
 d
 -
-<a
+< a
