@@ -78,29 +78,29 @@ public class SearchClient {
 		}
 	}
 
-	public LinkedList<State> Search(DataStructure ds) {
+	public LinkedList<State> Search(Strategy ds) {
 		
 		ds.addToFrontier(this.initialState);
 		
 		while (!ds.fronterIsEmpty()) {
 			
-			State currentNode = ds.getNodeFromFrontier();
+			State currentState = ds.getStateFromFrontier();
 			
-			if (currentNode.isGoalState(this.goalState)) {
-				return currentNode.getPath(new LinkedList<State>());	
+			if (currentState.isGoalState(this.goalState)) {
+				return currentState.getPath(new LinkedList<State>());	
 			}
 			
-			for (State childNode : currentNode.getChildren()) {
+			for (State childState : currentState.getChildren()) {
 				
-				if (!ds.inFrontier(childNode) && !ds.inExplored(childNode)) {
+				if (!ds.inFrontier(childState) && !ds.inExplored(childState)) {
 					
-					childNode.calcH(this.goalState);
+					childState.calcH(this.goalState);
 					
-					ds.addToFrontier(childNode);
+					ds.addToFrontier(childState);
 				}
 			}
 			
-			ds.addToExplored(currentNode);
+			ds.addToExplored(currentState);
 		}
 		
 		return null;
@@ -110,23 +110,23 @@ public class SearchClient {
 		
 		SearchClient client = new SearchClient();
 		
-		DataStructure ds;
+		Strategy ds;
 		
 		switch (strategy) {
 	        case "BFS":
-	            ds = new DataStructure.DataStructureBFS();
+	            ds = new Strategy.StrategyBFS();
 	            break;
 	        case "DFS":
-	            ds = new DataStructure.DataStructureDFS();
+	            ds = new Strategy.StrategyDFS();
 	            break;
 	        case "AStar":
-	            ds = new DataStructure.DataStructureBestFirst(new Heuristic.AStar());
+	            ds = new Strategy.StrategyBestFirst(new Heuristic.AStar());
 	            break;
 	        case "Greedy":
-	            ds = new DataStructure.DataStructureBestFirst(new Heuristic.Greedy());
+	            ds = new Strategy.StrategyBestFirst(new Heuristic.Greedy());
 	            break;
 	        default:
-	            ds = new DataStructure.DataStructureBFS();
+	            ds = new Strategy.StrategyBFS();
 	            System.err.println("No correct strategy detected, defaulting to (BFS)");    
 		}
 		

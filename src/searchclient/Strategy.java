@@ -5,11 +5,11 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
-public abstract class DataStructure {
+public abstract class Strategy {
 	
 	private HashSet<State> explored;
 	
-	public DataStructure() {
+	public Strategy() {
 		this.explored = new HashSet<State>();
 	}
 	
@@ -29,14 +29,14 @@ public abstract class DataStructure {
 	public abstract boolean inFrontier(State s);
 	public abstract boolean fronterIsEmpty();
 	public abstract int countFrontier();
-	public abstract State getNodeFromFrontier();
+	public abstract State getStateFromFrontier();
 	
-	public static class DataStructureBFS extends DataStructure {
+	public static class StrategyBFS extends Strategy {
 		
 		private ArrayDeque<State> frontier;
 		private HashSet<State> frontierSet;
 		
-		public DataStructureBFS() {
+		public StrategyBFS() {
 			super();
 			this.frontier = new ArrayDeque<State>();
 			this.frontierSet = new HashSet<State>();
@@ -55,7 +55,7 @@ public abstract class DataStructure {
 		}
 		
 		@Override
-		public State getNodeFromFrontier() {
+		public State getStateFromFrontier() {
 			State s = this.frontier.pollFirst();
 			this.frontierSet.remove(s);
 			return s;
@@ -72,12 +72,12 @@ public abstract class DataStructure {
 		}
 	}
 	
-	public static class DataStructureDFS extends DataStructure {
+	public static class StrategyDFS extends Strategy {
 		
 		private Stack<State> frontier;
 		private HashSet<State> frontierSet;
 		
-		public DataStructureDFS() {
+		public StrategyDFS() {
 			super();
 			this.frontier = new Stack<State>();
 			this.frontierSet = new HashSet<State>();
@@ -96,7 +96,7 @@ public abstract class DataStructure {
 		}
 		
 		@Override
-		public State getNodeFromFrontier() {
+		public State getStateFromFrontier() {
 			State s = this.frontier.pop();
 			this.frontierSet.remove(s);
 			return s;
@@ -113,12 +113,12 @@ public abstract class DataStructure {
 		}
 	}
 	
-	public static class DataStructureBestFirst extends DataStructure {
+	public static class StrategyBestFirst extends Strategy {
 		
 		private PriorityQueue<State> frontier;
 		private HashSet<State> frontierSet;
 		
-		public DataStructureBestFirst(Heuristic h) {
+		public StrategyBestFirst(Heuristic h) {
 			super();
 			this.frontier = new PriorityQueue<State>(h);
 			this.frontierSet = new HashSet<State>();
@@ -136,7 +136,7 @@ public abstract class DataStructure {
 		}
 		
 		@Override
-		public State getNodeFromFrontier() {
+		public State getStateFromFrontier() {
 			State s = this.frontier.poll();
 			this.frontierSet.remove(s);
 			return s;
