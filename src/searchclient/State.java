@@ -204,7 +204,8 @@ public abstract class State {
 		
 		@Override
 		public void calcH(Object obj) {
-			//this.h = this.clause.getLiterals().size();	
+			// Outcomment if you want to use the heuristic for shortest clause
+			//this.h = this.clause.getLiterals().size();
 		}
 		
 		@Override
@@ -224,10 +225,8 @@ public abstract class State {
 			ArrayList<Clause> allClauses = new ArrayList<Clause>();
 			allClauses.addAll(this.kb.getClauses());
 			allClauses.addAll(this.clauses);
-			//allClauses.add(this.clause);
 			
 			for (Clause c : allClauses) {
-				//if (c.equals(this.clause)) continue;
 				
 				int complementaryLiterals = 0;
 				for (Map.Entry<Literal, Boolean> entry : c.getLiterals().entrySet()) {
@@ -248,14 +247,7 @@ public abstract class State {
 				if (!allClauses.contains(newC)) {
 					StateKnowledgeBase s = new StateKnowledgeBase(this, this.kb, newC);
 					s.calcH2(this.clause, c);
-//					
-//					LinkedList<State> path = s.getPath(new LinkedList<State>());
-//					
-//					System.out.println("--------------");
-//					for (State e : path) {
-//						System.out.println(e.toString());
-//					}
-//					
+
 					children.add(s);
 				}
 			}

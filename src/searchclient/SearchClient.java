@@ -19,7 +19,7 @@ public class SearchClient {
 	// Define your file (the map to use) - manhattan.txt, copenhagen.txt or dtu.txt 
 	public static String fileRF = "dtu.txt";
 	// Choose one of the predefined or make one yourself - 1,2 or 3 - only works if dtu.txt is chosen as map.
-	public static int level = 3;
+	public static int level = 1;
 	
 	// For KnowledgeBase
 	// Define your file (the knowledge to use) - kb1.txt, kb2.txt, kb3.txt or kb4.txt (kb4 is not solvable)
@@ -90,6 +90,8 @@ public class SearchClient {
 				return currentState.getPath(new LinkedList<State>());	
 			}
 			
+			ds.addToExplored(currentState);
+			
 			for (State childState : currentState.getChildren()) {
 				
 				if (!ds.inFrontier(childState) && !ds.inExplored(childState)) {
@@ -100,7 +102,6 @@ public class SearchClient {
 				}
 			}
 			
-			ds.addToExplored(currentState);
 		}
 		
 		return null;
